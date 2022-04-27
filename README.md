@@ -1,42 +1,98 @@
-# Nuxt 3 Minimal Starter
+# Malumotni fetchlash
 
-Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
+> ㊟ `Fetchlash` o'zgaruvchiga malumot o'rnatish tushiniladi
 
-## Setup
+Nuxtda `useFetch`, `useLazyFetch`, `useAsyncData` va `useLazyAsyncData` kabi
+metodlar orqali applicationda malumotni fetch qilish mumkin
 
-Make sure to install the dependencies:
+ ```
+ 👉 `useFetch`, `useLazyFetch`, `useAsyncData` va `useLazyAsyncData` faqatgina
+ `setup` yoki `Lifecycle Hooks` da ishlaydi!
+ ```
 
-```bash
-# yarn
-yarn install
+## `useAsyncData`
 
-# npm
-npm install
+Sahifalarni, komponentalarni va pluginlarni ichida `useAsyncData` assinxron
+amalga oshadigan malumotlarni olish uchun ishlatish mumkin!
 
-# pnpm
-pnpm install --shamefully-hoist
+`👉 Ko'proq malumotlarni bu yerdan o'qishingiz mumkin:`
+[Use Async Data](https://v3.nuxtjs.org/api/composables/use-async-data)
+
+### Masalan
+
+```javascript
+let counter = 0
+export default () => {
+    counter++
+    return JSON.stringify(counter)
+}
 ```
 
-## Development Server
+```vue
 
-Start the development server on http://localhost:3000
+<script setup>
+const {data} = await useAsyncData('count', () => $fetch('/api/count'))
+</script>
 
-```bash
-npm run dev
+<template>
+  Page visits: {{ data }}
+</template>
 ```
 
-## Production
+`👉 Ko'proq malumotlarni bu yerdan o'qishingiz mumkin:`
+[Use Async Data](https://v3.nuxtjs.org/api/composables/use-async-data)
 
-Build the application for production:
+## `useLazyAsyncData`
 
-```bash
-npm run build
+Ushbu kompozable `useAysncData` bilan bir xilda faqatgina `lazy: true`
+optsiyasi bilan ishlatiladi Boshqa gap bilan aytganda assinxron funksiyasi
+navigatsiyani bloklamaydi. Bu shuni bildiradiki, siz malumotni qayerda `null`
+bo'lishini hal qilishingiz kerak bo'ladi (yoki istalgan qiymatni `default`
+funksiyada aniqlash kerak bo'ladi)
+
+`👉 Ko'proq malumotlarni bu yerdan o'qishingiz mumkin:`
+[Use Lazy Async Data.](https://v3.nuxtjs.org/api/composables/use-lazy-async-data)
+
+### Masalan
+
+```vue
+
+<template>
+  <div>
+    {{ pending ? 'Loading' : count }}
+  </div>
+</template>
+
+<script setup>
+const {pending, data: count} = useLazyAsyncData('count', () => $fetch('/api/count'))
+watch(count, (newCount) => {
+  // count null bolgani uchun kontentni korish
+  // qobiliyati avvaliga mavjud emas
+  // lekin siz watch qilishingiz mumkin
+})
+</script>
 ```
 
-Locally preview production build:
+## useFetch
 
-```bash
-npm run preview
+Sahifa, komponenta, va pluginlar ichida `useFetch` ni istalgan URL orqali universal
+holatda malumotni fetchlash uchun ishlatiladi.
+
+Ushbu kompozable `useAsyncData` va `$fetch` atrofida qulay wrapperni taqdim etadi.
+Bu avtomatik tarzda URLga asoslanib key generatsiya qiladi va API responsi turini
+aniqlab oladi
+
+`👉 Ko'proq malumotlarni bu yerdan o'qishingiz mumkin:`
+[UUse Fetch.](https://v3.nuxtjs.org/api/composables/use-fetch)
+
+### Masalan
+
+```vue
+<script setup>
+const {data} = await useFetch('/api/count')
+</script>
+
+<template>
+  Page visits: {{ data.count }}
+</template>
 ```
-
-Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment) for more information.
