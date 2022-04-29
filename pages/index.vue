@@ -5,12 +5,6 @@
 </template>
 
 <script setup>
-// const nuxtApp = useNuxtApp();
-// const {data: posts} = await useFetch('/api/posts', {
-//   baseURL: 'http://127.0.0.1:8000'
-// })
-
 const posts = await useNuxtApp().$apiFetch('/api/posts')
-// console.log(nuxtApp.$hello('Yunusali'))
 </script>
 
